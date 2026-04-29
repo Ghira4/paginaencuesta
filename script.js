@@ -1,5 +1,5 @@
 const flujos = {
-  'si':        ['contacto', 'perfil', 'datos-personales', 'estado-civil', 'hijos', 'documentacion', 'antepasado', 'genealogia', 'aire', 'guardar'],
+  'si':        ['contacto', 'perfil', 'datos-personales', 'estado-civil', 'hijos', 'documentacion', 'antepasado', 'aire', 'guardar'],
   'no':        ['contacto', 'perfil', 'datos-personales', 'estado-civil', 'hijos', 'antepasado', 'genealogia', 'guardar'],
   'no_sabe':   ['contacto', 'perfil', 'datos-personales', 'estado-civil', 'hijos', 'antepasado', 'genealogia', 'guardar'],
   'en_tramite':['contacto', 'perfil', 'datos-personales', 'estado-civil', 'hijos', 'antepasado', 'genealogia', 'tramite', 'guardar']
@@ -7,6 +7,30 @@ const flujos = {
 
 let perfilSeleccionado = 'no';
 let contadorDomicilios = 0;
+
+const provinciasItaliane = {
+  'AG':'Agrigento','AL':'Alessandria','AN':'Ancona','AO':'Aosta','AP':'Ascoli Piceno',
+  'AQ':"L'Aquila",'AR':'Arezzo','AT':'Asti','AV':'Avellino','BA':'Bari','BG':'Bergamo',
+  'BI':'Biella','BL':'Belluno','BN':'Benevento','BO':'Bologna','BR':'Brindisi',
+  'BS':'Brescia','BT':'Barletta-Andria-Trani','BZ':'Bolzano/Bozen','CA':'Cagliari',
+  'CB':'Campobasso','CE':'Caserta','CH':'Chieti','CL':'Caltanissetta','CN':'Cuneo',
+  'CO':'Como','CR':'Cremona','CS':'Cosenza','CT':'Catania','CZ':'Catanzaro','EN':'Enna',
+  'FC':'Forlì-Cesena','FE':'Ferrara','FG':'Foggia','FI':'Firenze','FM':'Fermo',
+  'FR':'Frosinone','GE':'Genova','GO':'Gorizia','GR':'Grosseto','IM':'Imperia',
+  'IS':'Isernia','KR':'Crotone','LC':'Lecco','LE':'Lecce','LI':'Livorno','LO':'Lodi',
+  'LT':'Latina','LU':'Lucca','MB':'Monza e Brianza','MC':'Macerata','ME':'Messina',
+  'MI':'Milano','MN':'Mantova','MO':'Modena','MS':'Massa-Carrara','MT':'Matera',
+  'NA':'Napoli','NO':'Novara','NU':'Nuoro','OR':'Oristano','PA':'Palermo',
+  'PC':'Piacenza','PD':'Padova','PE':'Pescara','PG':'Perugia','PI':'Pisa',
+  'PN':'Pordenone','PO':'Prato','PR':'Parma','PT':'Pistoia','PU':'Pesaro e Urbino',
+  'PV':'Pavia','PZ':'Potenza','RA':'Ravenna','RC':'Reggio Calabria','RE':'Reggio Emilia',
+  'RG':'Ragusa','RI':'Rieti','RM':'Roma','RN':'Rimini','RO':'Rovigo','SA':'Salerno',
+  'SI':'Siena','SO':'Sondrio','SP':'La Spezia','SR':'Siracusa','SS':'Sassari',
+  'SU':'Sud Sardegna','SV':'Savona','TA':'Taranto','TE':'Teramo','TN':'Trento',
+  'TO':'Torino','TP':'Trapani','TR':'Terni','TS':'Trieste','TV':'Treviso','UD':'Udine',
+  'VA':'Varese','VB':'Verbano-Cusio-Ossola','VC':'Vercelli','VE':'Venezia',
+  'VI':'Vicenza','VR':'Verona','VT':'Viterbo','VV':'Vibo Valentia'
+};
 
 let comunasItalianas = [
   "Roma (RM)", "Milano (MI)", "Napoli (NA)", "Torino (TO)", "Palermo (PA)", "Genova (GE)", "Bologna (BO)", "Firenze (FI)", "Treia (MC)"
@@ -109,8 +133,18 @@ function buscarComuna(valor) {
 
           div.onmousedown = function(e) {
               e.preventDefault();
-              const avoEl = document.getElementById('avo_comuna_provincia');
-              if(avoEl) avoEl.value = res;
+              const match = res.match(/^(.*?)\s*\((\w+)\)$/);
+              const comuneEl = document.getElementById('avo_comune');
+              const provinciaEl = document.getElementById('avo_provincia');
+              if (match) {
+                  if (comuneEl) comuneEl.value = match[1];
+                  if (provinciaEl) {
+                      const cod = match[2];
+                      provinciaEl.value = provinciasItaliane[cod] ? `${cod} — ${provinciasItaliane[cod]}` : cod;
+                  }
+              } else {
+                  if (comuneEl) comuneEl.value = res;
+              }
               sugerencias.classList.add('hidden');
           };
 
@@ -927,7 +961,7 @@ function guardarFicha() {
   }
 
   const avoNoSabe = document.getElementById('avo_no_sabe')?.checked;
-  const comuna = document.getElementById('avo_comuna_provincia')?.value || '';
+  const comuna = (document.getElementById('avo_comune')?.value || '') + ' ' + (document.getElementById('avo_provincia')?.value || '');
   const fechaEmigracion = document.querySelector('[name="avo_fecha_emigracion"]')?.value || '';
   const naturalizado = document.querySelector('[name="avo_naturalizado"]')?.value || '';
   const tieneHijos = document.getElementById('tiene_hijos')?.value || '';

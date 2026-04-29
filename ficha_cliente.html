@@ -8,6 +8,46 @@
 </head>
 <body>
 
+  <!-- LISTA DESPLEGABLE DE PROVINCIAS ITALIANAS -->
+  <datalist id="lista_provincias_it">
+    <option value="AG — Agrigento"><option value="AL — Alessandria"><option value="AN — Ancona">
+    <option value="AO — Aosta"><option value="AP — Ascoli Piceno"><option value="AQ — L'Aquila">
+    <option value="AR — Arezzo"><option value="AT — Asti"><option value="AV — Avellino">
+    <option value="BA — Bari"><option value="BG — Bergamo"><option value="BI — Biella">
+    <option value="BL — Belluno"><option value="BN — Benevento"><option value="BO — Bologna">
+    <option value="BR — Brindisi"><option value="BS — Brescia"><option value="BT — Barletta-Andria-Trani">
+    <option value="BZ — Bolzano/Bozen"><option value="CA — Cagliari"><option value="CB — Campobasso">
+    <option value="CE — Caserta"><option value="CH — Chieti"><option value="CL — Caltanissetta">
+    <option value="CN — Cuneo"><option value="CO — Como"><option value="CR — Cremona">
+    <option value="CS — Cosenza"><option value="CT — Catania"><option value="CZ — Catanzaro">
+    <option value="EN — Enna"><option value="FC — Forlì-Cesena"><option value="FE — Ferrara">
+    <option value="FG — Foggia"><option value="FI — Firenze"><option value="FM — Fermo">
+    <option value="FR — Frosinone"><option value="GE — Genova"><option value="GO — Gorizia">
+    <option value="GR — Grosseto"><option value="IM — Imperia"><option value="IS — Isernia">
+    <option value="KR — Crotone"><option value="LC — Lecco"><option value="LE — Lecce">
+    <option value="LI — Livorno"><option value="LO — Lodi"><option value="LT — Latina">
+    <option value="LU — Lucca"><option value="MB — Monza e Brianza"><option value="MC — Macerata">
+    <option value="ME — Messina"><option value="MI — Milano"><option value="MN — Mantova">
+    <option value="MO — Modena"><option value="MS — Massa-Carrara"><option value="MT — Matera">
+    <option value="NA — Napoli"><option value="NO — Novara"><option value="NU — Nuoro">
+    <option value="OR — Oristano"><option value="PA — Palermo"><option value="PC — Piacenza">
+    <option value="PD — Padova"><option value="PE — Pescara"><option value="PG — Perugia">
+    <option value="PI — Pisa"><option value="PN — Pordenone"><option value="PO — Prato">
+    <option value="PR — Parma"><option value="PT — Pistoia"><option value="PU — Pesaro e Urbino">
+    <option value="PV — Pavia"><option value="PZ — Potenza"><option value="RA — Ravenna">
+    <option value="RC — Reggio Calabria"><option value="RE — Reggio Emilia"><option value="RG — Ragusa">
+    <option value="RI — Rieti"><option value="RM — Roma"><option value="RN — Rimini">
+    <option value="RO — Rovigo"><option value="SA — Salerno"><option value="SI — Siena">
+    <option value="SO — Sondrio"><option value="SP — La Spezia"><option value="SR — Siracusa">
+    <option value="SS — Sassari"><option value="SU — Sud Sardegna"><option value="SV — Savona">
+    <option value="TA — Taranto"><option value="TE — Teramo"><option value="TN — Trento">
+    <option value="TO — Torino"><option value="TP — Trapani"><option value="TR — Terni">
+    <option value="TS — Trieste"><option value="TV — Treviso"><option value="UD — Udine">
+    <option value="VA — Varese"><option value="VB — Verbano-Cusio-Ossola"><option value="VC — Vercelli">
+    <option value="VE — Venezia"><option value="VI — Vicenza"><option value="VR — Verona">
+    <option value="VT — Viterbo"><option value="VV — Vibo Valentia">
+  </datalist>
+
   <!-- LISTA DESPLEGABLE DE PAÍSES PARA DOMICILIOS Y NACIMIENTOS -->
   <datalist id="lista_paises">
     <option value="Argentina">
@@ -437,11 +477,14 @@
           </select>
         </label>
 
-        <label style="grid-column: span 3;">¿En qué pueblo/ciudad de Italia nació? (Escribí para buscar):
+        <label style="grid-column: span 2;">¿En qué Comune (pueblo/ciudad) de Italia nació? (Escribí para buscar):
           <div style="position: relative;">
-            <input type="text" id="avo_comuna_provincia" name="avo_comuna_provincia" placeholder="Ej: Treia (MC)" autocomplete="off" onkeyup="buscarComuna(this.value)" onfocus="buscarComuna(this.value)" onblur="setTimeout(() => document.getElementById('sugerencias_comunas').classList.add('hidden'), 200)">
+            <input type="text" id="avo_comune" name="avo_comune" placeholder="Ej: Treia" autocomplete="off" onkeyup="buscarComuna(this.value)" onfocus="buscarComuna(this.value)" onblur="setTimeout(() => document.getElementById('sugerencias_comunas').classList.add('hidden'), 200)">
             <div id="sugerencias_comunas" class="hidden" style="position: absolute; background: white; border: 1px solid #ccc; width: 100%; max-height: 200px; overflow-y: auto; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
           </div>
+        </label>
+        <label>Provincia italiana:
+          <input type="text" id="avo_provincia" name="avo_provincia" placeholder="Ej: MC — Macerata" list="lista_provincias_it">
         </label>
 
         <label>Fecha de nacimiento: <input type="text" name="avo_fecha_nacimiento" placeholder="Ej: 15/04/1890 o aprox 1890"></label>
