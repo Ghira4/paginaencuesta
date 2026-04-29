@@ -1,0 +1,181 @@
+/* ==========================================
+   VARIABLES CSS Y COLORES
+   ========================================== */
+:root {
+  --primary-color: #005b9f;
+  --bg-color: #f4f7f6;
+  --border-color: #ccc;
+}
+
+/* ==========================================
+   ESTILOS BASE
+   ========================================== */
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: #333;
+  padding: 20px;
+}
+
+h1 { 
+  text-align: center; 
+  color: var(--primary-color); 
+}
+
+h2 { 
+  font-size: 1.2rem; 
+  color: #444; 
+  border-bottom: 2px solid var(--border-color); 
+  padding-bottom: 5px; 
+}
+
+h4 { margin-bottom: 10px; }
+
+/* ==========================================
+   LAYOUTS Y GRILLAS
+   ========================================== */
+.bloque {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.sub-bloque {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border: 1px dashed var(--border-color);
+  margin-top: 15px;
+  border-radius: 5px;
+}
+
+.grid-3 { 
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 15px; 
+}
+
+.grid-2 { 
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 15px; 
+}
+
+.grid-1 { 
+  display: grid; 
+  grid-template-columns: 1fr; 
+  gap: 15px; 
+}
+
+/* ==========================================
+   ELEMENTOS DE FORMULARIO
+   ========================================== */
+label { 
+  font-weight: bold; 
+  font-size: 0.9rem; 
+}
+
+input[type="text"], 
+input[type="number"], 
+input[type="date"], 
+input[type="tel"], 
+input[type="email"], 
+select {
+  width: 100%; 
+  padding: 8px; 
+  margin-top: 5px; 
+  border: 1px solid var(--border-color); 
+  border-radius: 4px; 
+  box-sizing: border-box;
+}
+
+/* ==========================================
+   BOTONES
+   ========================================== */
+.btn {
+  margin-top: 20px; 
+  padding: 10px 20px; 
+  background-color: var(--primary-color);
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  font-weight: bold;
+}
+
+.btn:hover { 
+  background-color: #00447a; 
+}
+
+.btn-outline {
+  background: transparent; 
+  border: 1px solid var(--primary-color); 
+  color: var(--primary-color);
+}
+
+/* ==========================================
+   UTILIDADES
+   ========================================== */
+.hidden { 
+  display: none !important; 
+}
+
+.alerta { 
+  border-left: 4px solid #005b9f; 
+  padding-left: 10px; 
+}
+
+.alerta-roja { 
+  border-color: #d32f2f; 
+  background-color: #ffebee; 
+}
+
+/* ==========================================
+   VALIDACIONES
+   ========================================== */
+.input-error { 
+  border: 2px solid #d32f2f !important; 
+  background-color: #fff8f8 !important; 
+}
+
+.radio-group-error { 
+  border: 2px solid #d32f2f !important; 
+  padding: 5px; 
+  border-radius: 4px; 
+  background-color: #fff8f8; 
+}
+
+/* ==========================================
+   ÁRBOL GENEALÓGICO
+   ========================================== */
+.arbol-nodo {
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  padding: 15px;
+  background: white;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.arbol-conector {
+  width: 4px;
+  height: 35px;
+  background-color: var(--primary-color);
+  margin: 0 auto;
+}
+
+.arbol-header {
+  background-color: #eef;
+  padding: 10px;
+  margin: -15px -15px 15px -15px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom: 1px solid var(--primary-color);
+  font-weight: bold;
+  color: var(--primary-color);
+  text-align: center;
+}

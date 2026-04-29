@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha del Cliente — CRM Ciudadanía Italiana</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- LISTA DESPLEGABLE DE PAÍSES PARA DOMICILIOS Y NACIMIENTOS -->
+  <datalist id="lista_paises">
+    <option value="Argentina">
+    <option value="Italia">
+    <option value="España">
+    <option value="Estados Unidos">
+    <option value="Brasil">
+    <option value="Chile">
+    <option value="Uruguay">
+    <option value="Paraguay">
+    <option value="Bolivia">
+    <option value="Perú">
+    <option value="Colombia">
+    <option value="Venezuela">
+    <option value="Ecuador">
+    <option value="México">
+    <option value="Canadá">
+    <option value="Reino Unido">
+    <option value="Francia">
+    <option value="Alemania">
+    <option value="Suiza">
+    <option value="Australia">
+    <option value="Nueva Zelanda">
+  </datalist>
+
+  <h1>Ficha del Cliente — CRM Ciudadanía Italiana</h1>
+
+  <!-- BLOQUE 0: ASESORÍA -->
+  <section id="seccion-asesoria" class="bloque" style="background-color: #f0f8ff;">
+    <h2 style="margin-top: 0; color: #005b9f;">Bloque 0 — Datos de la Consulta</h2>
+    <div class="grid-3">
+      <label>Fecha: <input type="date" name="fecha_asesoria"></label>
+      <label>Modalidad / Lugar:
+        <select name="modalidad_asesoria">
+          <option value="">-- Seleccionar --</option>
+          <option value="presencial_rosario">Presencial (Rosario)</option>
+          <option value="videollamada">Videollamada</option>
+          <option value="whatsapp">WhatsApp / Chat</option>
+          <option value="telefonica">Llamada Telefónica</option>
+          <option value="otro">Otro</option>
+        </select>
+      </label>
+      <label>Nombre del Asesor: <input type="text" name="nombre_asesor"></label>
+    </div>
+  </section>
+
+  <!-- BLOQUE 1: CONTACTO -->
+  <section id="seccion-contacto" class="bloque">
+    <h2>Bloque 1 — Datos de quien nos contacta</h2>
+    <div class="grid-3">
+      <label>Nombre (Contacto) *: <input type="text" name="contacto_nombre" class="req"></label>
+      <label>Apellido (Contacto) *: <input type="text" name="contacto_apellido" class="req"></label>
+      <label>Teléfono *: <input type="tel" name="contacto_telefono" class="req"></label>
+      <label>Email *: <input type="email" name="contacto_email" class="req"></label>
+      <label>Localidad / Ciudad *: <input type="text" name="contacto_localidad" class="req"></label>
+    </div>
+
+    <hr style="margin: 20px 0; border:0; border-top: 1px dashed var(--border-color);">
+
+    <div class="grid-3">
+      <div>
+        <p style="margin-top: 0;"><strong>¿El trámite es para vos o para otra persona? *</strong></p>
+        <div id="grupo_tramite_para">
+            <label><input type="radio" name="tramite_para" class="req-radio" value="propio" onchange="mostrarOpcionesTercero(this.value)"> Es para mí (Propio)</label><br>
+            <label><input type="radio" name="tramite_para" class="req-radio" value="tercero" onchange="mostrarOpcionesTercero(this.value)"> Es para otra persona (Tercero)</label>
+        </div>
+
+        <div id="opciones_tercero" class="hidden sub-bloque" style="margin-top: 15px;">
+          <label>¿Qué sos de la persona que hará el trámite?
+            <select name="relacion_tercero" onchange="mostrarOtroParentesco(this.value)">
+              <option value="">-- Seleccionar --</option>
+              <option value="padre_madre">Soy su Padre / Madre</option>
+              <option value="hijo_a">Soy su Hijo/a (mayor de edad)</option>
+              <option value="conyuge">Soy su Esposo/a o Pareja</option>
+              <option value="no_familiar">Otro familiar o amigo</option>
+            </select>
+          </label>
+          <div id="div_otro_parentesco" class="hidden" style="margin-top: 10px;">
+            <input type="text" name="otro_parentesco" placeholder="Aclarar (Ej: Sobrino, Gestor...)">
+          </div>
+          <label style="margin-top: 10px; display: block;">Nombre de la persona interesada:<input type="text" id="titular_nombre_b1" style="background-color: #ffffe0;"></label>
+          <label style="margin-top: 10px; display: block;">Apellido de la persona interesada:<input type="text" id="titular_apellido_b1" style="background-color: #ffffe0;"></label>
+        </div>
+      </div>
+
+      <div>
+        <p style="margin-top: 0;"><strong>¿Qué necesita hacer?</strong></p>
+        <label><input type="checkbox" name="motivo_visita" value="traduccion"> Traducción de actas</label><br>
+        <label><input type="checkbox" name="motivo_visita" value="atencion_ciudadano"> Trámites para el que ya es ciudadano</label><br>
+        <label><input type="checkbox" name="motivo_visita" value="como_obtener"> Saber cómo obtener la ciudadanía</label><br>
+        <label><input type="checkbox" name="motivo_visita" value="gestoria"> Que le armemos la carpeta (Gestoría)</label><br>
+        <label><input type="checkbox" name="motivo_visita" value="turismo"> Viajar / Turismo</label>
+      </div>
+
+      <div>
+        <p style="margin-top: 0;"><strong>¿Cómo nos conoció?</strong></p>
+        <select name="como_conocio">
+          <option value="">-- Seleccionar --</option>
+          <option value="redes">Redes Sociales (Instagram, Facebook)</option>
+          <option value="google">Búsqueda en Google</option>
+          <option value="recomendacion">Me recomendó un conocido</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+    </div>
+    <button type="button" class="btn" onclick="continuarDesde('contacto')">Continuar al Bloque 2</button>
+  </section>
+
+  <!-- BLOQUE 2: IDENTIFICACIÓN DE PERFIL Y MOTIVO -->
+  <section id="seccion-perfil" class="bloque hidden">
+    <h2>Bloque 2 — Situación de la Ciudadanía</h2>
+    <div>
+      <p><strong>¿La persona interesada ya tiene la ciudadanía italiana? *</strong></p>
+      <div id="grupo_es_ciudadano">
+          <label><input type="radio" name="es_ciudadano" class="req-radio" value="si" onchange="seleccionarPerfil('si')"> Sí, ya es ciudadano/a</label><br>
+          <label><input type="radio" name="es_ciudadano" class="req-radio" value="no" onchange="seleccionarPerfil('no')"> No, quiere sacarla</label><br>
+          <label><input type="radio" name="es_ciudadano" class="req-radio" value="no_sabe" onchange="seleccionarPerfil('no_sabe')"> No sabe / Quiere investigar su caso</label><br>
+          <label><input type="radio" name="es_ciudadano" class="req-radio" value="en_tramite" onchange="seleccionarPerfil('en_tramite')"> Está en trámite (Ya presentó la carpeta)</label>
+      </div>
+
+      <div id="origen_ciudadania_div" class="hidden sub-bloque alerta">
+        <div class="grid-2">
+          <label>¿Cómo la obtuvo?
+            <select name="origen_ciudadania" id="origen_ciudadania">
+              <option value="">-- Seleccionar --</option>
+              <option value="consulado">En Consulado</option>
+              <option value="italia">En Italia</option>
+              <option value="juicio">Por Juicio</option>
+              <option value="matrimonio">Por Matrimonio</option>
+              <option value="no_sabe">No sabe o recuerda</option>
+            </select>
+          </label>
+          <label>¿En qué año se la dieron?: <input type="number" name="anio_obtencion" placeholder="Ej: 2015"></label>
+          <label>¿Dónde hizo el trámite?: <input type="text" id="lugar_obtencion" name="lugar_obtencion" placeholder="Ej: Consulado Rosario, Comuna de Roma"></label>
+          <label>¿Le llegan los sobres para votar de Italia a su casa?:
+            <select name="recibe_boletas">
+              <option value="">-- Seleccionar --</option>
+              <option value="si">Sí, le llegan</option>
+              <option value="no">No le llegan</option>
+              <option value="no_sabe">No sabe / No recuerda</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn" onclick="continuarDesde('perfil')">Continuar al Bloque 3</button>
+  </section>
+
+  <!-- BLOQUE 3: DATOS PERSONALES -->
+  <section id="seccion-datos-personales" class="bloque hidden">
+    <h2>Bloque 3 — Datos Personales y de sus Padres</h2>
+
+    <div id="mensaje-titular" class="alerta" style="background-color: #eef; padding: 10px; margin-bottom: 15px; display: none;"></div>
+
+    <div id="bloque_nombres_titular" class="hidden grid-2" style="margin-bottom: 15px;">
+      <label>Nombre de la persona interesada *: <input type="text" id="titular_nombre" name="titular_nombre" class="req" style="background-color: #ffffe0;"></label>
+      <label>Apellido de la persona interesada *: <input type="text" id="titular_apellido" name="titular_apellido" class="req" style="background-color: #ffffe0;"></label>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: 15px;">
+      <label>Género *:
+        <select name="genero_solicitante" class="req">
+          <option value="">--</option><option value="M">Masculino</option><option value="F">Femenino</option>
+        </select>
+      </label>
+      <label>Fecha de nacimiento *: <input type="date" name="fecha_nacimiento" class="req"></label>
+      <label>Nº de DNI: <input type="text" name="dni_titular" placeholder="Ej: 12345678"></label>
+      <label>Profesión / De qué trabaja: <input type="text" name="profesion"></label>
+      <label>Título de estudio: <input type="text" name="titulo_estudio" placeholder="Ej: Secundario completo, Licenciado/a"></label>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: 15px;">
+      <label>Ciudad de nacimiento *: <input type="text" name="ciudad_nacimiento" class="req"></label>
+      <label>Provincia de nacimiento *: <input type="text" name="provincia_nacimiento" class="req"></label>
+      <label>País de nacimiento *: <input list="lista_paises" name="pais_nacimiento" class="req"></label>
+    </div>
+
+    <div class="grid-3">
+      <div style="grid-column: span 1;">
+        <label>¿Cuántas nacionalidades tiene? (Incluyendo la italiana si corresponde) *:
+          <select name="cantidad_nacionalidades" class="req" onchange="generarNacionalidades('solicitante', this.value)">
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4 o más</option>
+          </select>
+        </label>
+        <div id="contenedor-nacionalidades-solicitante" style="margin-top: 5px;">
+          <input type="text" name="nacionalidad_solicitante_1" class="req" placeholder="Ej: Argentina, Italiana" oninput="checkNacionalidadItaliana('solicitante')">
+        </div>
+      </div>
+    </div>
+
+    <hr style="margin: 20px 0; border:0; border-top: 1px dashed var(--border-color);">
+    <h4>Datos de los Padres de la persona</h4>
+
+    <details style="margin-bottom: 15px; padding: 10px; background-color: #f9f9f9; border-left: 4px solid var(--primary-color);">
+      <summary style="cursor: pointer; font-weight: bold; color: var(--primary-color); outline: none;">📖 Guía rápida: Tipos de vínculo (Click para ver)</summary>
+      <div style="margin-top: 10px; font-size: 0.85rem; line-height: 1.5; color: #333;">
+        <p><strong>1. De sangre (biológico):</strong> Hijo nacido directamente de los padres.</p>
+        <p><strong>2. Adoptivo:</strong> Se formalizó por un juez (Adopción plena o simple).</p>
+        <p><strong>3. Tratamiento de fertilidad:</strong> Hubo ayuda médica (Inseminación artificial, FIV).</p>
+        <p><strong>4. Vientre subrogado:</strong> Una mujer llevó el embarazo para otra persona o pareja.</p>
+        <p><strong>5. Reconocido legalmente:</strong> Uno de los padres lo anotó / le dio el apellido tiempo después de nacer.</p>
+      </div>
+    </details>
+
+    <div class="grid-2" style="margin-bottom: 15px;">
+      <!-- Bloque Padre -->
+      <div class="sub-bloque" style="margin-top:0;">
+        <h5 style="margin-top: 0;">Datos del Padre</h5>
+        <div class="grid-2">
+            <label>Nombre del Padre: <input type="text" name="padre_nombre"></label>
+            <label>Apellido del Padre: <input type="text" name="padre_apellido"></label>
+        </div><br>
+
+        <label>¿Cómo es el vínculo? *:
+          <select name="filiacion_padre" class="req" onchange="mostrarAclaracionFiliacion('padre', this.value)">
+            <option value="">-- Seleccionar --</option>
+            <option value="biologico">1. De sangre (Biológico)</option>
+            <option value="adoptivo">2. Adoptivo</option>
+            <option value="reproduccion_asistida">3. Tratamiento de fertilidad (FIV)</option>
+            <option value="gestacion_sustitucion">4. Vientre subrogado</option>
+            <option value="reconocimiento">5. Reconocido tiempo después</option>
+            <option value="otro">Otro (Aclarar)</option>
+          </select>
+        </label>
+        <div id="div_filiacion_padre_otro" class="hidden" style="margin-top: 5px;">
+          <input type="text" name="filiacion_padre_otro_texto" placeholder="Aclarar...">
+        </div>
+        <br>
+
+        <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #ccc;">
+          <label>¿Está vivo?
+            <select id="padre_vivo" onchange="checkNacionalidadItaliana('padre')" style="width: 50%;">
+              <option value="">--</option><option value="si">Sí</option><option value="no">No</option>
+            </select>
+          </label>
+        </div>
+
+        <label>¿Cuántas nacionalidades tiene? (Incluyendo la italiana):
+          <select name="padre_cant_nac" onchange="generarNacionalidades('padre', this.value)">
+            <option value="1" selected>1</option><option value="2">2</option><option value="3">3</option>
+          </select>
+        </label>
+        <div id="contenedor-nacionalidades-padre" style="margin-top: 5px;">
+          <input type="text" name="nacionalidad_padre_1" placeholder="Ej: Argentina, Italiana" oninput="checkNacionalidadItaliana('padre')">
+        </div>
+
+        <div id="docs_padre_container" class="hidden"></div>
+      </div>
+
+      <!-- Bloque Madre -->
+      <div class="sub-bloque" style="margin-top:0;">
+        <h5 style="margin-top: 0;">Datos de la Madre</h5>
+        <div class="grid-2">
+            <label>Nombre de la Madre: <input type="text" name="madre_nombre"></label>
+            <label>Apellido de la Madre: <input type="text" name="madre_apellido"></label>
+        </div><br>
+
+        <label>¿Cómo es el vínculo? *:
+          <select name="filiacion_madre" class="req" onchange="mostrarAclaracionFiliacion('madre', this.value)">
+            <option value="">-- Seleccionar --</option>
+            <option value="biologico">1. De sangre (Biológica)</option>
+            <option value="adoptivo">2. Adoptiva</option>
+            <option value="reproduccion_asistida">3. Tratamiento de fertilidad (FIV)</option>
+            <option value="gestacion_sustitucion">4. Vientre subrogado</option>
+            <option value="reconocimiento">5. Reconocida tiempo después</option>
+            <option value="otro">Otro (Aclarar)</option>
+          </select>
+        </label>
+        <div id="div_filiacion_madre_otro" class="hidden" style="margin-top: 5px;">
+          <input type="text" name="filiacion_madre_otro_texto" placeholder="Aclarar...">
+        </div>
+        <br>
+
+        <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #ccc;">
+          <label>¿Está viva?
+            <select id="madre_vivo" onchange="checkNacionalidadItaliana('madre')" style="width: 50%;">
+              <option value="">--</option><option value="si">Sí</option><option value="no">No</option>
+            </select>
+          </label>
+        </div>
+
+        <label>¿Cuántas nacionalidades tiene? (Incluyendo la italiana):
+          <select name="madre_cant_nac" onchange="generarNacionalidades('madre', this.value)">
+            <option value="1" selected>1</option><option value="2">2</option><option value="3">3</option>
+          </select>
+        </label>
+        <div id="contenedor-nacionalidades-madre" style="margin-top: 5px;">
+          <input type="text" name="nacionalidad_madre_1" placeholder="Ej: Argentina, Italiana" oninput="checkNacionalidadItaliana('madre')">
+        </div>
+
+        <div id="docs_madre_container" class="hidden"></div>
+      </div>
+
+      <label style="grid-column: span 2; border-top: 1px dashed #ccc; padding-top: 10px;">
+        ¿Los padres estaban casados cuando nació la persona?
+        <select name="padres_casados" style="width: 50%;">
+          <option value="">-- Seleccionar --</option>
+          <option value="si">Sí, estaban casados</option>
+          <option value="no">No, no estaban casados</option>
+        </select>
+      </label>
+    </div>
+    <hr style="margin: 20px 0; border:0; border-top: 1px dashed var(--border-color);">
+    <h4>Domicilio actual</h4>
+    <div class="grid-3">
+      <label>Calle *: <input type="text" name="domicilio_calle" class="req"></label>
+      <label>Número *: <input type="text" name="domicilio_numero" class="req"></label>
+      <label>Localidad / Ciudad *: <input type="text" name="domicilio_localidad" class="req"></label>
+      <label>Código Postal: <input type="text" name="domicilio_cp"></label>
+      <label>Piso / Depto (opcional): <input type="text" name="domicilio_piso_depto"></label>
+    </div>
+
+    <button type="button" class="btn" onclick="continuarDesde('datos-personales')">Continuar al Bloque 4</button>
+  </section>
+
+  <!-- BLOQUE 5: ESTADO CIVIL -->
+  <section id="seccion-estado-civil" class="bloque hidden">
+    <h2>Bloque 5 — Estado Civil y Casamientos</h2>
+    <div class="grid-2">
+      <label>Estado civil actual *:
+        <select name="estado_civil" id="select_estado_civil" class="req" onchange="mostrarEstadoCivil()">
+          <option value="">-- Seleccionar --</option>
+          <option value="soltero">Soltero/a</option>
+          <option value="casado">Casado/a</option>
+          <option value="divorciado">Divorciado/a</option>
+          <option value="viudo">Viudo/a</option>
+          <option value="union_civil">Unido/a civilmente (con persona del mismo sexo)</option>
+        </select>
+      </label>
+
+      <div id="div-nupcias" class="hidden">
+        <label>¿Cuántas veces se casó?:
+          <select name="cantidad_nupcias" id="select_cantidad_nupcias" onchange="generarMatrimonios()">
+            <option value="0">-- Seleccionar --</option>
+            <option value="1">1 vez</option>
+            <option value="2">2 veces</option>
+            <option value="3">3 veces</option>
+            <option value="4">4 o más veces</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div id="contenedor-matrimonios" class="hidden" style="margin-top: 20px;">
+      <div id="lista-matrimonios-dinamicos"></div>
+    </div>
+    <button type="button" class="btn" onclick="continuarDesde('estado-civil')">Continuar al siguiente paso</button>
+  </section>
+
+  <!-- BLOQUE 6: HIJOS -->
+  <section id="seccion-hijos" class="bloque hidden">
+    <h2>Bloque 6 — Hijos</h2>
+
+    <div style="margin-bottom: 15px;">
+      <label>¿Tiene hijos?
+        <select id="tiene_hijos" onchange="toggleHijos(this.value)" style="width: 50%;">
+          <option value="">-- Seleccionar --</option>
+          <option value="menores">Sí, (sólo menores de 18 años)</option>
+          <option value="mayores">Sí, (sólo mayores de 18 años)</option>
+          <option value="ambos">Sí, (menores y mayores)</option>
+          <option value="no">No tengo hijos</option>
+        </select>
+      </label>
+    </div>
+
+    <div id="bloque-hijos" class="hidden sub-bloque">
+      <details style="margin-bottom: 15px; padding: 10px; background-color: #f9f9f9; border-left: 4px solid var(--primary-color);">
+        <summary style="cursor: pointer; font-weight: bold; color: var(--primary-color); outline: none;">📖 Guía rápida: Tipos de vínculo (Click para ver)</summary>
+        <div style="margin-top: 10px; font-size: 0.85rem; line-height: 1.5; color: #333;">
+          <p><strong>1. De sangre (biológico):</strong> Hijo nacido directamente de los padres.</p>
+          <p><strong>2. Adoptivo:</strong> Se formalizó por un juez.</p>
+          <p><strong>3. Tratamiento de fertilidad (TRHA):</strong> Hubo ayuda médica.</p>
+          <p><strong>4. Vientre subrogado:</strong> Gestación por otra persona.</p>
+          <p><strong>5. Reconocido legalmente:</strong> Lo anotaron tiempo después de nacer.</p>
+        </div>
+      </details>
+
+      <label>¿Cuántos hijos tiene?:
+        <input type="number" id="cant_hijos" value="0" min="0" onchange="generarHijos(this.value)" style="width: 50%;">
+      </label>
+
+      <div id="lista-hijos" style="margin-top: 15px;"></div>
+    </div>
+    <button type="button" class="btn" onclick="continuarDesde('hijos')">Continuar al siguiente paso</button>
+  </section>
+
+  <!-- BLOQUE 7: DOCUMENTACIÓN ITALIANA -->
+  <section id="seccion-documentacion" class="bloque hidden">
+    <h2>Bloque 7 — Documentos Italianos (Si ya tiene)</h2>
+    <div id="docs_solicitante_container"></div>
+    <button type="button" class="btn" onclick="continuarDesde('documentacion')">Continuar al siguiente paso</button>
+  </section>
+
+  <!-- BLOQUE 8: ANTEPASADO ITALIANO -->
+  <section id="seccion-antepasado" class="bloque hidden">
+    <h2>Bloque Específico — El Antepasado Italiano (AVO / Familiar que emigró)</h2>
+    <p style="font-size: 0.9em; color: #555;"><em>Nota: Completar siempre para nuestra base de datos, sin importar si el trámite ya está finalizado o en curso.</em></p>
+
+    <div style="margin-bottom: 20px; padding: 15px; background-color: #fff3e0; border: 1px dashed #f57c00; border-radius: 5px;">
+      <label style="cursor: pointer; color: #d84315; font-weight: bold;">
+        <input type="checkbox" id="avo_no_sabe" onchange="toggleAvoNoSabe(this.checked)">
+        No tengo los datos del italiano original (Necesito servicio de búsqueda de actas)
+      </label>
+    </div>
+
+    <div id="campos_avo">
+      <div class="grid-3">
+        <label style="grid-column: span 3;">¿Qué era tuyo el italiano original?:
+          <select id="relacion_avo" name="relacion_avo" onchange="generarLineaGenealogica(this.value)" style="width: 50%;">
+            <option value="">-- Seleccionar --</option>
+            <option value="hijo">Era mi Padre / Madre</option>
+            <option value="nieto">Era mi Abuelo /a</option>
+            <option value="bisnieto">Era mi Bisabuelo /a</option>
+            <option value="tataranieto">Era mi Tatarabuelo /a</option>
+            <option value="chozno">Era mi Chozno /a</option>
+          </select>
+        </label>
+
+        <label>Nombre del Italiano: <input type="text" name="avo_nombre"></label>
+        <label>Apellido del Italiano: <input type="text" name="avo_apellido"></label>
+        <label>Género:
+          <select name="avo_genero">
+            <option value="">--</option><option value="M">Masculino</option><option value="F">Femenino</option>
+          </select>
+        </label>
+
+        <label style="grid-column: span 3;">¿En qué pueblo/ciudad de Italia nació? (Escribí para buscar):
+          <div style="position: relative;">
+            <input type="text" id="avo_comuna_provincia" name="avo_comuna_provincia" placeholder="Ej: Treia (MC)" autocomplete="off" onkeyup="buscarComuna(this.value)" onfocus="buscarComuna(this.value)" onblur="setTimeout(() => document.getElementById('sugerencias_comunas').classList.add('hidden'), 200)">
+            <div id="sugerencias_comunas" class="hidden" style="position: absolute; background: white; border: 1px solid #ccc; width: 100%; max-height: 200px; overflow-y: auto; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+          </div>
+        </label>
+
+        <label>Fecha de nacimiento: <input type="text" name="avo_fecha_nacimiento" placeholder="Ej: 15/04/1890 o aprox 1890"></label>
+        <label>Fecha que emigró de Italia: <input type="text" name="avo_fecha_emigracion" placeholder="Ej: 1910"></label>
+        <label>¿Se naturalizó Argentino? (Renunció a ser italiano):
+          <select name="avo_naturalizado" onchange="mostrarNaturalizacion(this.value)">
+            <option value="">--</option><option value="si">Sí, se naturalizó</option><option value="no">No</option><option value="no_sabe">No sabe</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="bloque-naturalizacion" class="hidden sub-bloque grid-2">
+        <label>Fecha exacta en que se naturalizó: <input type="text" name="avo_fecha_naturalizacion" placeholder="Ej: 20/05/1925"></label>
+        <label>¿Tuvo a su hijo ANTES de naturalizarse?:
+          <select name="avo_hijos_antes_naturalizacion">
+            <option value="">--</option><option value="si">Sí</option><option value="no">No</option><option value="no_sabe">No sabe</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <button type="button" class="btn" onclick="continuarDesde('antepasado')">Continuar al siguiente paso</button>
+  </section>
+
+  <!-- BLOQUE 9: LÍNEA GENEALÓGICA Y ÁRBOL -->
+  <section id="seccion-genealogia" class="bloque hidden">
+    <h2>Bloque Específico — Árbol Genealógico Familiar</h2>
+
+    <div style="margin-bottom: 20px;">
+      <h4 style="margin: 0 0 10px 0;">Filtro Ley nueva (2025)</h4>
+      <label>¿Ya tenés un turno en el Consulado o el Juicio iniciado ANTES del 27 de marzo de 2025?
+        <select name="turno_previo_2025" onchange="mostrarPreguntasNuevaLey(this.value)" style="width: 50%;">
+          <option value="">-- Seleccionar --</option>
+          <option value="si">Sí (Zafa de la ley nueva)</option>
+          <option value="no">No</option>
+        </select>
+      </label>
+
+      <div id="preguntas_nueva_ley" class="hidden sub-bloque grid-1">
+        <label>¿Tu papá, mamá o algún abuelo/a tenía <strong>SÓLO</strong> la ciudadanía italiana cuando vos naciste? (Es decir, que no eran argentinos también)
+          <select name="ancestro_exclusivo" style="width: 50%;">
+            <option value="">-- Seleccionar --</option><option value="si">Sí</option><option value="no">No / No sabe</option>
+          </select>
+        </label>
+        <label>¿Tu papá o mamá vivió legalmente en Italia por al menos 2 años seguidos <strong>DESPUÉS</strong> de ser ciudadanos y <strong>ANTES</strong> de que vos nazcas?
+          <select name="residencia_2_anios" style="width: 50%;">
+            <option value="">-- Seleccionar --</option><option value="si">Sí</option><option value="no">No / No sabe</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <hr style="border: 0; border-top: 2px dashed #005b9f; margin: 30px 0;">
+
+    <div id="lista-generaciones"></div>
+
+    <button type="button" class="btn" onclick="continuarDesde('genealogia')">Continuar al siguiente paso</button>
+  </section>
+
+  <!-- BLOQUE 10: AIRE -->
+  <section id="seccion-aire" class="bloque hidden">
+    <h2>Bloque Específico — Registro en el Consulado (AIRE) y Mudanzas</h2>
+    <p style="font-size: 0.9em; color: #555;">Vamos a pedirle todos los domicilios en orden cronológico <strong>desde el momento en que es ciudadano/a italiano/a.</strong></p>
+
+    <label>Registro AIRE actual:
+      <select name="aire_estado" style="width: 50%;">
+        <option value="">--</option>
+        <option value="si">Sí, está inscripto</option>
+        <option value="no">No está inscripto</option>
+        <option value="en_tramite">El alta está en trámite</option>
+        <option value="no_sabe">No sabe / No recuerda</option>
+      </select>
+    </label><br><br>
+
+    <div id="lista-domicilios"></div>
+    <button type="button" class="btn btn-outline" onclick="agregarDomicilio()">+ Agregar domicilio o mudanza</button>
+
+    <hr style="margin: 25px 0; border:0; border-top: 1px dashed var(--border-color);">
+    <h4 style="margin-bottom: 10px;">¿Qué actas desea transcribir en Italia?</h4>
+    <div class="sub-bloque">
+      <div style="margin-bottom: 12px;">
+        <label style="font-weight: normal; display: block; margin-bottom: 6px;"><input type="checkbox" name="acta_matrimonio"> Acta de matrimonio</label>
+        <label style="font-weight: normal; display: block; margin-bottom: 6px;"><input type="checkbox" name="acta_divorcio"> Sentencia de divorcio</label>
+        <label style="font-weight: normal; display: block; margin-bottom: 6px;"><input type="checkbox" name="acta_adopcion"> Sentencia de adopción</label>
+        <label style="font-weight: normal; display: block; margin-bottom: 6px;"><input type="checkbox" name="acta_muerte"> Acta de defunción</label>
+        <label id="fila_acta_union_civil" style="font-weight: normal; display: none; margin-bottom: 6px;"><input type="checkbox" name="acta_union_civil"> Unión civil con persona del mismo sexo</label>
+        <label style="font-weight: normal; display: block; margin-bottom: 6px;">
+          <input type="checkbox" name="acta_nacimiento_hijos" onchange="mostrarHijosActa(this.checked)"> Acta/s de nacimiento de hijo/s menor/es
+        </label>
+        <div id="div_nombres_hijos_acta" class="hidden" style="margin-top: 6px; margin-left: 22px;">
+          <input type="text" name="acta_nacimiento_nombres_hijos" placeholder="Indicar nombre/s del hijo/s" style="width: 60%;">
+        </div>
+      </div>
+      <label>¿En qué Comuna italiana desea transcribirlas?:
+        <input type="text" name="acta_comuna_italiana" placeholder="Ej: Potenza Picena" style="width: 50%; margin-top: 5px;">
+      </label>
+    </div>
+
+    <button type="button" class="btn" onclick="continuarDesde('aire')" style="display:block; margin-top: 20px;">Continuar al siguiente paso</button>
+  </section>
+
+  <!-- BLOQUE 11: TRÁMITE ACTUAL -->
+  <section id="seccion-tramite" class="bloque hidden">
+    <h2>Bloque Específico — Trámite en Curso (Si ya presentó algo)</h2>
+    <div class="grid-2">
+      <label>¿Dónde presentó los papeles?:
+        <select name="lugar_tramite" onchange="mostrarDetallesJuicio(this.value)">
+           <option value="">-- Seleccionar --</option>
+           <option value="consulado">En el Consulado (Argentina u otro país)</option>
+           <option value="comuna">En una Comuna en Italia</option>
+           <option value="judicial_materna">Por Juicio (Línea Materna)</option>
+           <option value="judicial_falta_turnos">Por Juicio (Falta de turnos)</option>
+        </select>
+      </label>
+      <label>¿Qué fecha los presentó o inició?: <input type="date" name="fecha_presentacion"></label>
+      <label>Nº de Protocolo / Ticket: <input type="text" name="nro_protocolo"></label>
+      <label>¿En qué estado está el trámite hoy?: <input type="text" name="estado_tramite"></label>
+    </div>
+
+    <div id="detalles_juicio" class="hidden sub-bloque" style="margin-top: 15px; border-left: 4px solid #9c27b0; background-color: #f3e5f5;">
+      <h4 style="margin-top: 0; color: #6a1b9a;">Datos del Juicio</h4>
+      <div class="grid-2">
+        <label>Tribunal / Juzgado: <input type="text" name="juicio_tribunal" placeholder="Ej: Tribunale di Roma"></label>
+        <label>Nº de Expediente Judicial: <input type="text" name="juicio_nro_expediente" placeholder="Ej: RG 1234/2024"></label>
+        <label>Abogado / Estudio interviniente: <input type="text" name="juicio_abogado" placeholder="Nombre del abogado o estudio"></label>
+        <label>Fecha de inicio del juicio: <input type="date" name="juicio_fecha_inicio"></label>
+        <label style="grid-column: span 2;">Observaciones del juicio: <input type="text" name="juicio_observaciones" placeholder="Detalles relevantes del expediente"></label>
+      </div>
+    </div>
+
+    <button type="button" class="btn" onclick="continuarDesde('tramite')">Continuar al siguiente paso</button>
+  </section>
+
+  <!-- GUARDAR Y FINALIZAR -->
+  <section id="seccion-guardar" class="bloque hidden" style="background-color: #e6f7ff; border-color: var(--primary-color);">
+    <input type="hidden" name="tipo_ciudadania_inferido" id="tipo_ciudadania_inferido">
+    <h2 style="margin-top: 0;">Finalizar Ficha</h2>
+    <label style="display: block; margin-bottom: 15px;">Notas / Observaciones del asesor:
+      <textarea name="notas_asesor" rows="4" style="width: 100%; margin-top: 5px; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box; font-family: Arial, sans-serif; font-size: 0.9rem; resize: vertical;" placeholder="Anotá acá cualquier detalle relevante que no entre en los campos anteriores..."></textarea>
+    </label>
+    <p>Al hacer click, el sistema evaluará todas las normativas y armará el informe final.</p>
+    <button type="button" class="btn" onclick="guardarFicha()">Evaluar caso y Generar Informe</button>
+  </section>
+
+  <!-- RESULTADO -->
+  <section id="seccion-resultado" class="bloque hidden" style="border: 2px solid green;">
+    <h2 style="margin-top: 0;">Informe Automático y Análisis Legal</h2>
+    <div id="resultado-contenido"></div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
