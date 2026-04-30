@@ -475,7 +475,39 @@ function generarHijos(cantidad) {
   const n = parseInt(cantidad);
   if (!n) return;
 
+  const titNombre   = document.getElementById('titular_nombre')?.value || document.querySelector('[name="contacto_nombre"]')?.value || '';
+  const titApellido = document.getElementById('titular_apellido')?.value || document.querySelector('[name="contacto_apellido"]')?.value || '';
+  const titFechaISO = document.querySelector('[name="fecha_nacimiento"]')?.value || '';
+  const titFecha    = titFechaISO ? titFechaISO.split('-').reverse().join('/') : '';
+  const titGenero   = document.querySelector('[name="genero_solicitante"]')?.value || '';
+  const titNac      = document.querySelector('[name="nacionalidad_solicitante_1"]')?.value || '';
+  // Lado del titular: siempre autocompletado. Lado del otro progenitor: vacío, se llena con el selector.
+  const padreNombre   = titGenero === 'M' ? titNombre   : '';
+  const padreApellido = titGenero === 'M' ? titApellido : '';
+  const padreFecha    = titGenero === 'M' ? titFecha    : '';
+  const padreCiud     = titGenero === 'M' ? titNac      : '';
+  const madreNombre   = titGenero === 'F' ? titNombre   : '';
+  const madreApellido = titGenero === 'F' ? titApellido : '';
+  const madreFecha    = titGenero === 'F' ? titFecha    : '';
+  const madreCiud     = titGenero === 'F' ? titNac      : '';
+
+  const nupcias = parseInt(document.getElementById('select_cantidad_nupcias')?.value) || 0;
+  let opcionesConyuges = '<option value="">-- Seleccionar --</option>';
+  for (let m = 1; m <= nupcias; m++) {
+      const cN = document.querySelector(`[name="mat_${m}_nombre"]`)?.value || '';
+      const cA = document.querySelector(`[name="mat_${m}_apellido"]`)?.value || '';
+      opcionesConyuges += `<option value="mat_${m}">${cN} ${cA} — Casamiento ${m}</option>`;
+  }
+  opcionesConyuges += '<option value="otra">Otra persona (no registrada)</option>';
+
   for (let i = 1; i <= n; i++) {
+     const bannerTitular = `<small style="display:block;margin-bottom:8px;color:#388e3c;font-size:0.82em;">✓ Datos del titular (autocompletado)</small>`;
+     const otroTipoLabel = titGenero === 'M' ? 'madre' : 'padre';
+     const selectorOtro = nupcias > 0
+       ? `<div style="margin-bottom:8px;padding:5px 10px;background:#fff8e1;border-left:3px solid #f9a825;border-radius:3px;font-size:0.84em;"><label style="font-weight:normal;margin:0;">¿Quién es el/la progenitor/a? <select style="margin-left:5px;" onchange="seleccionarProgenitor('${titGenero === 'M' ? 'madre' : 'padre'}', ${i}, this.value)">${opcionesConyuges}</select></label></div>`
+       : `<small style="display:block;margin-bottom:8px;color:#e65100;font-size:0.82em;">⚠ Sin casamientos registrados — completar manualmente</small>`;
+     const topPadreHTML = titGenero === 'M' ? bannerTitular : selectorOtro;
+     const topMadreHTML = titGenero === 'F' ? bannerTitular : selectorOtro;
      const div = document.createElement('div');
      div.className = 'sub-bloque';
      div.style.backgroundColor = '#fff';
@@ -484,7 +516,7 @@ function generarHijos(cantidad) {
        <div class="grid-3" style="margin-bottom: 15px;">
          <label>Nombre: <input type="text" name="hijo_${i}_nombre"></label>
          <label>Apellido: <input type="text" name="hijo_${i}_apellido"></label>
-         <label>Fecha de Nacimiento: <input type="text" name="hijo_${i}_fecha_nac" placeholder="Ej: dd/mm/aaaa"></label>
+         <label>Fecha de Nacimiento: <input type="text" name="hijo_${i}_fecha_nac" placeholder="Ej: dd/mm/aaaa" onchange="verificarPadresCasados(${i})"></label>
          <label>Sexo:
            <select name="hijo_${i}_genero">
              <option value="">--</option>
@@ -513,11 +545,12 @@ function generarHijos(cantidad) {
 
        <div class="grid-2" style="border-top: 1px dashed #eee; padding-top:10px; margin-top:15px;">
          <div>
+           ${topPadreHTML}
            <div class="grid-2">
-              <label>Nombre del Padre: <input type="text" name="hijo_${i}_padre_nombre"></label>
-              <label>Apellido del Padre: <input type="text" name="hijo_${i}_padre_apellido"></label>
-              <label>Fecha de nac. del Padre: <input type="text" name="hijo_${i}_padre_fecha_nac" placeholder="dd/mm/aaaa o año"></label>
-              <label>Ciudadanía/s del Padre: <input type="text" name="hijo_${i}_padre_ciudadania" placeholder="Ej: Argentina, Italiana"></label>
+              <label>Nombre del Padre: <input type="text" name="hijo_${i}_padre_nombre" value="${padreNombre}"></label>
+              <label>Apellido del Padre: <input type="text" name="hijo_${i}_padre_apellido" value="${padreApellido}"></label>
+              <label>Fecha de nac. del Padre: <input type="text" name="hijo_${i}_padre_fecha_nac" placeholder="dd/mm/aaaa o año" value="${padreFecha}"></label>
+              <label>Ciudadanía/s del Padre: <input type="text" name="hijo_${i}_padre_ciudadania" placeholder="Ej: Argentina, Italiana" value="${padreCiud}"></label>
            </div>
            <label style="display: block; margin-top: 10px;">¿Cómo es el vínculo con el Padre? (Filiación):
              <select name="hijo_${i}_filiacion_padre" onchange="mostrarAclaracionFiliacion('hijo_${i}_padre', this.value)">
@@ -535,11 +568,12 @@ function generarHijos(cantidad) {
            </div>
          </div>
          <div>
+           ${topMadreHTML}
            <div class="grid-2">
-             <label>Nombre de la Madre: <input type="text" name="hijo_${i}_madre_nombre"></label>
-             <label>Apellido de la Madre: <input type="text" name="hijo_${i}_madre_apellido"></label>
-             <label>Fecha de nac. de la Madre: <input type="text" name="hijo_${i}_madre_fecha_nac" placeholder="dd/mm/aaaa o año"></label>
-             <label>Ciudadanía/s de la Madre: <input type="text" name="hijo_${i}_madre_ciudadania" placeholder="Ej: Argentina, Italiana"></label>
+             <label>Nombre de la Madre: <input type="text" name="hijo_${i}_madre_nombre" value="${madreNombre}"></label>
+             <label>Apellido de la Madre: <input type="text" name="hijo_${i}_madre_apellido" value="${madreApellido}"></label>
+             <label>Fecha de nac. de la Madre: <input type="text" name="hijo_${i}_madre_fecha_nac" placeholder="dd/mm/aaaa o año" value="${madreFecha}"></label>
+             <label>Ciudadanía/s de la Madre: <input type="text" name="hijo_${i}_madre_ciudadania" placeholder="Ej: Argentina, Italiana" value="${madreCiud}"></label>
            </div>
            <label style="display: block; margin-top: 10px;">¿Cómo es el vínculo con la Madre? (Filiación):
              <select name="hijo_${i}_filiacion_madre" onchange="mostrarAclaracionFiliacion('hijo_${i}_madre', this.value)">
@@ -564,6 +598,18 @@ function generarHijos(cantidad) {
                <option value="">--</option><option value="si">Sí</option><option value="no">No</option>
              </select>
            </label>
+           <div id="hijo_${i}_casados_indicator" style="display:none; font-size:0.82em; margin-top:4px; padding: 4px 8px; border-radius:3px;"></div>
+       </div>
+
+       <div style="margin-top: 10px;">
+           <label>¿Este hijo/a está notificado/a al Consulado?
+             <select name="hijo_${i}_consulado" style="width: 50%;">
+               <option value="">--</option>
+               <option value="si">Sí</option>
+               <option value="no">No</option>
+               <option value="no_sabe">No sabe</option>
+             </select>
+           </label>
        </div>
 
        <div id="docs_hijo_${i}_container" class="hidden" style="border-top: 1px dashed #eee; padding-top: 15px; margin-top: 15px;">
@@ -572,6 +618,84 @@ function generarHijos(cantidad) {
      `;
      lista.appendChild(div);
   }
+}
+
+function seleccionarProgenitor(tipo, idHijo, valor) {
+    const nombreEl    = document.querySelector(`[name="hijo_${idHijo}_${tipo}_nombre"]`);
+    const apellidoEl  = document.querySelector(`[name="hijo_${idHijo}_${tipo}_apellido"]`);
+    const fechaEl     = document.querySelector(`[name="hijo_${idHijo}_${tipo}_fecha_nac"]`);
+    const ciudadaniaEl = document.querySelector(`[name="hijo_${idHijo}_${tipo}_ciudadania"]`);
+
+    if (valor === 'otra' || valor === '') {
+        if (nombreEl) nombreEl.value = '';
+        if (apellidoEl) apellidoEl.value = '';
+        if (fechaEl) fechaEl.value = '';
+        if (ciudadaniaEl) ciudadaniaEl.value = '';
+        return;
+    }
+    const matId = valor.replace('mat_', '');
+    if (nombreEl)     nombreEl.value     = document.querySelector(`[name="mat_${matId}_nombre"]`)?.value || '';
+    if (apellidoEl)   apellidoEl.value   = document.querySelector(`[name="mat_${matId}_apellido"]`)?.value || '';
+    if (fechaEl)      fechaEl.value      = document.querySelector(`[name="mat_${matId}_fecha_nac"]`)?.value || '';
+    if (ciudadaniaEl) ciudadaniaEl.value = document.querySelector(`[name="nacionalidad_mat_${matId}_1"]`)?.value || '';
+}
+
+function parsearAnio(str) {
+    if (!str) return null;
+    const m = str.match(/\b(18|19|20)\d{2}\b/);
+    return m ? parseInt(m[0]) : null;
+}
+
+function verificarPadresCasados(idHijo) {
+    const fechaNacStr = document.querySelector(`[name="hijo_${idHijo}_fecha_nac"]`)?.value || '';
+    if (!fechaNacStr) return;
+    const select = document.querySelector(`[name="hijo_${idHijo}_padres_casados"]`);
+    const indicator = document.getElementById(`hijo_${idHijo}_casados_indicator`);
+    if (!select) return;
+
+    const nupcias = parseInt(document.getElementById('select_cantidad_nupcias')?.value) || 0;
+    if (nupcias === 0) return;
+
+    const anioHijo = parsearAnio(fechaNacStr);
+    if (!anioHijo) return;
+
+    let resultadoSi = false;
+    let mensajeInfo = '';
+
+    for (let m = 1; m <= nupcias; m++) {
+        const fechaMatStr = document.querySelector(`[name="mat_${m}_fecha_matrimonio"]`)?.value || '';
+        if (!fechaMatStr) continue;
+        const anioMat = parsearAnio(fechaMatStr);
+        if (!anioMat) continue;
+
+        const estadoMat = document.getElementById(`mat_${m}_estado`)?.value || '';
+        let anioFin = null;
+        if (estadoMat === 'divorcio') {
+            anioFin = parsearAnio(document.querySelector(`[name="mat_${m}_fecha_divorcio"]`)?.value || '');
+        } else if (estadoMat === 'fallecimiento') {
+            anioFin = parsearAnio(document.querySelector(`[name="mat_${m}_fecha_fallecimiento"]`)?.value || '');
+        }
+
+        if (anioHijo >= anioMat && (!anioFin || anioHijo <= anioFin)) {
+            resultadoSi = true;
+            const conyN = document.querySelector(`[name="mat_${m}_nombre"]`)?.value || '';
+            const conyA = document.querySelector(`[name="mat_${m}_apellido"]`)?.value || '';
+            mensajeInfo = `✓ Nació durante el Casamiento ${m} con ${conyN} ${conyA} (casados en ${anioMat})`;
+            break;
+        }
+    }
+
+    if (!resultadoSi) {
+        mensajeInfo = '✗ No coincide con el período de ningún matrimonio registrado';
+    }
+
+    select.value = resultadoSi ? 'si' : 'no';
+    if (indicator) {
+        indicator.textContent = mensajeInfo;
+        indicator.style.color = resultadoSi ? '#388e3c' : '#d32f2f';
+        indicator.style.background = resultadoSi ? '#e8f5e9' : '#fdecea';
+        indicator.style.display = 'block';
+    }
 }
 
 function mostrarHijosActa(checked) {
@@ -604,6 +728,11 @@ function toggleAvoNoSabe(checked) {
     } else if (btnContinua) {
         btnContinua.innerHTML = "Continuar al siguiente paso";
     }
+}
+
+function mostrarFastIt(valor) {
+  const div = document.getElementById('fastit_datos_div');
+  if (div) valor === 'si' ? div.classList.remove('hidden') : div.classList.add('hidden');
 }
 
 function mostrarNaturalizacion(valor) {
@@ -954,7 +1083,7 @@ function guardarFicha() {
   let notaUnionCivil = '';
 
   if (estadoCivilTitular === 'union_civil') {
-    notaUnionCivil = '<div class="alerta" style="border-left-color:#9c27b0; background:#f3e5f5; padding:15px; margin-top:10px;">ℹ️ <strong>NOTA — UNIÓN CIVIL:</strong> La persona está unida civilmente con persona del mismo sexo. Verificar que el acta de unión civil esté transcripta en el Comune italiano correspondiente y actualizar la inscripción en el AIRE como pareja civil.</div>';
+    notaUnionCivil = '<div class="alerta" style="border-left-color:#9c27b0; background:#f3e5f5; padding:15px; margin-top:10px;">ℹ️ <strong>NOTA — UNIÓN CIVIL:</strong> La persona está unida civilmente con persona del mismo sexo. Verificar que el acta de unión civil esté transcripta en el Comune italiano correspondiente y actualizar el estado civil en el Registro AIRE.</div>';
   }
   if (filiacionPadre === 'adoptivo' || filiacionMadre === 'adoptivo') {
     alertaAdopcion = '<div class="alerta" style="border-left-color:#9c27b0; background:#f3e5f5; padding:15px; margin-top:10px;">⚠️ <strong>ALERTA FILIACIÓN ADOPTIVA:</strong> Se registró un vínculo adoptivo con uno de los padres. La transmisión de ciudadanía italiana por adopción depende del tipo y la fecha. <strong>Adopción plena posterior a 1983</strong>: se equipara a la filiación biológica. Para adopciones anteriores o simples corresponde análisis legal específico antes de avanzar.</div>';
@@ -990,6 +1119,64 @@ function guardarFicha() {
   if (tieneHijos === 'menores' || tieneHijos === 'ambos') {
     alertaHijosMenores = '<div class="alerta alerta-roja" style="padding: 15px; margin-top: 15px;">⚠️ <strong>ALERTA LEY 74/2025 (Hijos Menores):</strong> Al tener hijos menores de 18 años, la nueva ley exige presentar el trámite de ellos ante el Consulado ANTES del 31 de mayo de 2029.</div>';
   }
+
+  // Verificar que el último domicilio declarado como ciudadano/a coincida con el domicilio actual
+  let alertaDomicilio = '';
+  if (perfilSeleccionado === 'si') {
+    let ultimaCiudadAire = '';
+    // Buscar el domicilio sin fecha "hasta" (el vigente); si no hay, tomar el último registrado
+    for (let d = contadorDomicilios; d >= 1; d--) {
+      const hasta  = document.querySelector(`[name="domicilio_${d}_hasta"]`)?.value || '';
+      const ciudad = document.querySelector(`[name="domicilio_${d}_ciudad"]`)?.value || '';
+      if (!hasta && ciudad) { ultimaCiudadAire = ciudad; break; }
+    }
+    if (!ultimaCiudadAire) {
+      ultimaCiudadAire = document.querySelector(`[name="domicilio_${contadorDomicilios}_ciudad"]`)?.value || '';
+    }
+    const domActualLocalidad = document.querySelector('[name="domicilio_localidad"]')?.value || '';
+    if (ultimaCiudadAire && domActualLocalidad &&
+        ultimaCiudadAire.toLowerCase().trim() !== domActualLocalidad.toLowerCase().trim()) {
+      alertaDomicilio = `<div class="alerta alerta-roja" style="padding:15px; margin-top:15px;">⚠️ <strong>ALERTA — DOMICILIO DESACTUALIZADO:</strong> El último domicilio declarado como ciudadano/a italiano/a es <strong>${ultimaCiudadAire}</strong>, pero el domicilio actual declarado es <strong>${domActualLocalidad}</strong>. <strong>El titular debe actualizar su domicilio ante el Consulado.</strong></div>`;
+    }
+  }
+
+  // Verificar estado civil e hijos notificados al Consulado (solo para ciudadanos)
+  const itemsFichaAnagrafica = [];
+  const itemsActualizacion = [];
+  if (perfilSeleccionado === 'si') {
+    const aireEstado = document.querySelector('[name="aire_estado"]')?.value || '';
+    if (aireEstado === 'no_sabe') {
+      itemsFichaAnagrafica.push('No se pudo confirmar si el titular está inscripto en el Registro AIRE');
+    } else if (aireEstado === 'no') {
+      itemsActualizacion.push('El titular no está dado de alta en el Registro AIRE (Registro de Italianos en el Exterior)');
+    }
+
+    const cantNupcias = parseInt(document.getElementById('select_cantidad_nupcias')?.value) || 0;
+    for (let m = 1; m <= cantNupcias; m++) {
+      const mc = document.querySelector(`[name="mat_${m}_consulado"]`)?.value || '';
+      const cN = document.querySelector(`[name="mat_${m}_nombre"]`)?.value || '';
+      const cA = document.querySelector(`[name="mat_${m}_apellido"]`)?.value || '';
+      const lbl = `${cN} ${cA}`.trim() || `Casamiento ${m}`;
+      if (mc === 'no_sabe') itemsFichaAnagrafica.push(`Estado civil con ${lbl} (Casamiento ${m}) sin verificar`);
+      else if (mc === 'no')  itemsActualizacion.push(`Casamiento ${m} con ${lbl} no notificado al Consulado`);
+    }
+
+    const cantHijosNum = parseInt(document.getElementById('cant_hijos')?.value) || 0;
+    for (let h = 1; h <= cantHijosNum; h++) {
+      const hc = document.querySelector(`[name="hijo_${h}_consulado"]`)?.value || '';
+      const hN = document.querySelector(`[name="hijo_${h}_nombre"]`)?.value || '';
+      const hA = document.querySelector(`[name="hijo_${h}_apellido"]`)?.value || '';
+      const hLbl = `${hN} ${hA}`.trim() || `Hijo/a ${h}`;
+      if (hc === 'no_sabe') itemsFichaAnagrafica.push(`${hLbl} — situación ante el Consulado sin verificar`);
+      else if (hc === 'no')  itemsActualizacion.push(`${hLbl} no notificado/a al Consulado`);
+    }
+  }
+  const alertaFichaAnagrafica = itemsFichaAnagrafica.length
+    ? `<div class="alerta" style="border-left-color:#1565c0; background:#e3f2fd; padding:15px; margin-top:15px;">🔍 <strong>REALIZAR VERIFICACIÓN EN FICHA ANAGRAFICA:</strong><ul style="margin:8px 0 0 20px;">${itemsFichaAnagrafica.map(x => `<li>${x}</li>`).join('')}</ul></div>`
+    : '';
+  const alertaActualizacionDatos = itemsActualizacion.length
+    ? `<div class="alerta" style="border-left-color:#e65100; background:#fff3e0; padding:15px; margin-top:15px;">📋 <strong>REALIZAR ACTUALIZACIÓN DE DATOS EN CONSULADO:</strong><ul style="margin:8px 0 0 20px;">${itemsActualizacion.map(x => `<li>${x}</li>`).join('')}</ul></div>`
+    : '';
 
   let bloqueadoPorDL2025 = false;
   if (perfilSeleccionado === 'no' || perfilSeleccionado === 'no_sabe') {
@@ -1090,7 +1277,7 @@ function guardarFicha() {
         notaViaMaterna = '<div class="alerta" style="border-left-color:#f57c00; background:#fff3e0; padding:15px; margin-top:10px;">⚖️ <strong>ANÁLISIS GENEALÓGICO — VÍA MATERNA 1948:</strong> El árbol confirma que existe una mujer en la línea de descendencia que transmitió la ciudadanía a un hijo/a nacido/a <strong>antes del 1 de enero de 1948</strong>. Esto es consistente con el reconocimiento obtenido por vía judicial.</div>';
     }
     resultado.innerHTML = `<p>🇮🇹 <strong>INFORME:</strong> El titular ya cuenta con el reconocimiento de su ciudadanía italiana.</p>
-    <div class="sub-bloque"><strong>Análisis del sistema:</strong><br>Fue reconocido mediante <strong>${textoOrigen}</strong> en el año <strong>${anioObtencion}</strong>.</div>` + notaViaMaterna + notaUnionCivil + alertaAdopcion + alertaAustrohungara + alertaHijosMenores;
+    <div class="sub-bloque"><strong>Análisis del sistema:</strong><br>Fue reconocido mediante <strong>${textoOrigen}</strong> en el año <strong>${anioObtencion}</strong>.</div>` + notaViaMaterna + notaUnionCivil + alertaAdopcion + alertaAustrohungara + alertaHijosMenores + alertaDomicilio + alertaFichaAnagrafica + alertaActualizacionDatos;
   } else {
     if (alertaAustrohungara) {
        resultado.innerHTML = alertaAustrohungara + notaUnionCivil + alertaAdopcion + alertaHijosMenores + '<p><em>Nota: La alerta Austro-Húngara bloquea todo análisis posterior.</em></p>';

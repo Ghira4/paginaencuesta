@@ -191,6 +191,25 @@
             </select>
           </label>
         </div>
+
+        <hr style="margin: 15px 0; border: 0; border-top: 1px dashed #ccc;">
+        <div>
+          <label><strong>¿Tiene cuenta en el Portal Fast It?</strong>
+            <select name="fastit_cuenta" onchange="mostrarFastIt(this.value)" style="width: 40%; margin-left: 10px;">
+              <option value="">-- Seleccionar --</option>
+              <option value="si">Sí</option>
+              <option value="no">No</option>
+              <option value="no_sabe">No sabe</option>
+            </select>
+          </label>
+          <div id="fastit_datos_div" class="hidden sub-bloque" style="margin-top: 10px;">
+            <div class="grid-3">
+              <label>Email de la cuenta: <input type="text" name="fastit_email" placeholder="Ej: nombre@mail.com"></label>
+              <label>Usuario: <input type="text" name="fastit_usuario" placeholder="Usuario del portal"></label>
+              <label>Contraseña: <input type="text" name="fastit_password" placeholder="Contraseña"></label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <button type="button" class="btn" onclick="continuarDesde('perfil')">Continuar al Bloque 3</button>
@@ -545,8 +564,8 @@
 
   <!-- BLOQUE 10: AIRE -->
   <section id="seccion-aire" class="bloque hidden">
-    <h2>Bloque Específico — Registro en el Consulado (AIRE) y Mudanzas</h2>
-    <p style="font-size: 0.9em; color: #555;">Vamos a pedirle todos los domicilios en orden cronológico <strong>desde el momento en que es ciudadano/a italiano/a.</strong></p>
+    <h2>Bloque Específico — Registro AIRE y Domicilios desde que es ciudadano/a italiano/a</h2>
+    <p style="font-size: 0.9em; color: #555;">Registrá todos los domicilios en orden cronológico <strong>desde el momento en que es ciudadano/a italiano/a.</strong></p>
 
     <label>Registro AIRE actual:
       <select name="aire_estado" style="width: 50%;">
@@ -558,8 +577,9 @@
       </select>
     </label><br><br>
 
+    <h4 style="margin: 15px 0 8px 0;">Domicilios desde que es ciudadano/a italiano/a</h4>
     <div id="lista-domicilios"></div>
-    <button type="button" class="btn btn-outline" onclick="agregarDomicilio()">+ Agregar domicilio o mudanza</button>
+    <button type="button" class="btn btn-outline" onclick="agregarDomicilio()">+ Agregar domicilio</button>
 
     <hr style="margin: 25px 0; border:0; border-top: 1px dashed var(--border-color);">
     <h4 style="margin-bottom: 10px;">¿Qué actas desea transcribir en Italia?</h4>
